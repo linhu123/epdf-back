@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContributorServiceImpl extends ServiceImpl<ContributorMapper, Contributor> implements ContributorService {
 
+    @Override
+    public Contributor findLaste() {
+        return this.getBaseMapper().findLaste();
+    }
 }

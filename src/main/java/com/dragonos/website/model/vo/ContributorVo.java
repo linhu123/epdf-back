@@ -3,7 +3,7 @@ package com.dragonos.website.model.vo;
 import lombok.Data;
 
 @Data
-public class Contributor {
+public class ContributorVo {
 
     /**
      *   {

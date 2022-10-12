@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class JwtFilter extends HandlerInterceptorAdapter {
@@ -21,8 +23,12 @@ public class JwtFilter extends HandlerInterceptorAdapter {
 
     public static final String LANKA_URL = "/abc";
 
+    public static final List<String> WRITE_LIST = Arrays.asList("/repo");
+
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -30,6 +36,10 @@ public class JwtFilter extends HandlerInterceptorAdapter {
         if (uri.contains(LOGIN_URL) || uri.contains(LANKA_URL) || uri.contains("/doc.html") || uri.contains("/swagger-resources") || uri.contains("/error")) {
             return true;
         }
+        if (canGo(uri,WRITE_LIST)){
+            return true;
+        }
+
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
@@ -63,5 +73,22 @@ public class JwtFilter extends HandlerInterceptorAdapter {
         }
         ContextHolder.setHolder(token);
         return true;
+    }
+
+    /**
+     *
+     * 白名单判断函数
+     * @param uri
+     * @param WRITE_LIST
+     * @return
+     */
+    public boolean canGo(String uri,List<String> WRITE_LIST){
+        for (String write :
+                WRITE_LIST) {
+            if (uri.contains(write)){
+                return true;
+            }
+        }
+        return false;
     }
 }

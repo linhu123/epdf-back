@@ -2,6 +2,7 @@ package com.dragonos.website.dao;
 
 import com.dragonos.website.model.Contributor;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dragonos.website.service.ContributorService;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ContributorMapper extends BaseMapper<Contributor> {
 
+    Contributor findLaste();
 }

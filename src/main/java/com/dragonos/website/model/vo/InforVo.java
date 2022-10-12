@@ -2,6 +2,7 @@ package com.dragonos.website.model.vo;
 
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +21,17 @@ import java.util.Map;
  *     },
  */
 @Data
-public class Info {
+public class InforVo {
 
     private Map<String,String> projectLink;
 
-    private Statistic statistic;
+    private StatisticVo statistic;
 
-    private List<Contributor> contributorList;
+    private List<ContributorVo> contributorList;
 
+    public InforVo(){
+        this.projectLink = new HashMap<>();
+        this.projectLink.put("github","https://github.com/fslongjin/DragonOS");
+        this.projectLink.put("gitee","https://gitee.com/DragonOS/DragonOS");
+    }
 }

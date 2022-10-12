@@ -1,11 +1,18 @@
 package com.dragonos.website.shedule;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.dragonos.website.model.Contributor;
+import com.dragonos.website.model.JsonResult;
+import com.dragonos.website.service.ContributorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
 
 /**
  * 定时获取仓库的贡献者数据
@@ -13,6 +20,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class GetRepoContributor {
+
+    @Autowired
+    private ContributorService contributorService;
+
 
     @Value("${github.header.accept}")
     private String accept;
@@ -27,6 +38,11 @@ public class GetRepoContributor {
     private String repo;
 
 
+    /**
+     * 定时任务 每1小时运行一次
+     * @return
+     */
+    @Scheduled(cron = "0 0/1 * * * ?")
     public Object listContributor() {
         String path = "https://api.github.com/repos/" + owner + "/" + repo + "/contributors";
         System.out.println(path);
@@ -35,9 +51,18 @@ public class GetRepoContributor {
         headers.set("accept", accept);
         headers.set("auth", token);
         HttpEntity<Object> objectHttpEntity = new HttpEntity<>(headers);
-        Object forObject = restTemplate.exchange(path, HttpMethod.GET, objectHttpEntity, Object.class);
-        System.out.println(forObject);
-        return forObject;
+        ResponseEntity<JSONArray> exchange = restTemplate.exchange(path, HttpMethod.GET, objectHttpEntity, JSONArray.class);
+        System.out.println(exchange);
+        int statusCodeValue = exchange.getStatusCodeValue();
+        if (statusCodeValue == 200){
+            JSONArray body = exchange.getBody();
+            Contributor contributor = new Contributor();
+            contributor.setCreateTime(LocalDateTime.now());
+            contributor.setInfor(body.toJSONString());
+            contributorService.save(contributor);
+
+        }
+        return exchange;
     }
 }
 

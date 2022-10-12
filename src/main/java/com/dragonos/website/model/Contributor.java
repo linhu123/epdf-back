@@ -1,6 +1,7 @@
 package com.dragonos.website.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author linhu
@@ -28,9 +29,11 @@ public class Contributor implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField("create_time")
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "信息")
+    @TableField("infor")
     private String infor;
 
 
