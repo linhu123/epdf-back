@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class ControllerLogAop {
 
-    @Around("execution(* com.wanmu.nbwhgc.controller..*.*(..))")
+    @Around("execution(* com.epdf.website.controller..*.*(..))")
     public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
 
